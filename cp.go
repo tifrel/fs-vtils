@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-// TODO: testing
+// TODO: cpDir, cpSymlink, cpFile
 
 // Path.Cp creates a file at target and writes the contents of p to it. Allowed
 // flags:
