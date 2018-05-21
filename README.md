@@ -3,7 +3,7 @@
 
 ## Basics
 
-This package tries to simplify file IO with golang and is heavily inspired by Bash/Linux commandslike `cp`, `mv`, `mkdir` etc.
+This package tries to simplify file IO with golang and is heavily inspired by Bash/Linux commands like `cp`, `mv`, `mkdir` etc.
 It provides a `Path` type to give additional type safety over strings. The defined methods follow the pattern:
 
     sourcePath.Cmd(targetPath, flags...)
