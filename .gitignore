@@ -1,0 +1,7 @@
+.DS_Store
+_*.go
+*.bak
+
+testdata
+*_test.go
+test.sh
