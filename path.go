@@ -6,7 +6,9 @@ import (
 	"io"
 	"os"
 	pathPkg "path"
+	"time"
 
+	"github.com/djherbis/times"
 	"github.com/fsnotify/fsnotify"
 )
 
@@ -149,6 +151,74 @@ func (p Path) IsHidden() bool {
 // IsVisible is the negation of IsHidden.
 func (p Path) IsVisible() bool {
 	return !p.IsHidden()
+}
+
+// ---------------- modification, creation and access times ----------------- //
+
+// Returns modification, change and access time (in this order) of the file at
+// p. On Plan9 or Windows versions older than and including XP change times
+// cannot be retrieved. Birth times can only be retrieved on Windows, FreeBSD,
+// NetBSD and Darwin (macOS). If a time cannot be retrieved, this method will
+// return Epoch (1970-01-01) for that value.
+func (p Path) Times() (atime, ctime, mtime, btime time.Time, err error) {
+	// https://github.com/djherbis/times
+	timeSpec, err := times.Stat(string(p))
+	if err != nil {
+		return
+	}
+
+	mtime = timeSpec.ModTime()
+	atime = timeSpec.AccessTime()
+	ctime = timeSpec.ChangeTime()
+	btime = timeSpec.BirthTime()
+	return
+}
+
+func (p Path) Atime() (time.Time, error) {
+	atime, _, _, _, err := p.Times()
+	return atime, err
+}
+
+func (p Path) Ctime() (time.Time, error) {
+	_, ctime, _, _, err := p.Times()
+	if ctime.IsZero() {
+		return ctime, MISSING_OS_SUPPORT.new(_PATH_EMPTY, _FLAG_EMPTY)
+	}
+	return ctime, err
+}
+
+func (p Path) Mtime() (time.Time, error) {
+	_, _, mtime, _, err := p.Times()
+	return mtime, err
+}
+
+func (p Path) Btime() (time.Time, error) {
+	_, _, _, btime, err := p.Times()
+	if btime.IsZero() {
+		return btime, MISSING_OS_SUPPORT.new(_PATH_EMPTY, _FLAG_EMPTY)
+	}
+	return btime, err
+}
+
+func (p Path) SinceAccess() (time.Duration, error) {
+	return since(p.Atime())
+}
+func (p Path) SinceChange() (time.Duration, error) {
+	return since(p.Ctime())
+}
+func (p Path) SinceMod() (time.Duration, error) {
+	return since(p.Mtime())
+}
+func (p Path) SinceBirth() (time.Duration, error) {
+	return since(p.Btime())
+}
+
+func since(t time.Time, err error) (time.Duration, error) {
+	if err != nil {
+		return 0, err
+	}
+
+	return time.Now().Sub(t), nil
 }
 
 // ----------------------- path manipulation methods ------------------------ //
