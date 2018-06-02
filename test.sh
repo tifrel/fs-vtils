@@ -27,6 +27,9 @@ reset_Cp
 
 echo -e "\n# Running go tests"
 go test
+if [[ $? -ne 0 ]];then
+  exit 1
+fi
 
 echo -e "\n# Checking for correct fs mutations"
 evaluate_MkDir
