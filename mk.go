@@ -1,6 +1,10 @@
 package fsv
 
-import "os"
+import (
+	"os"
+
+	"github.com/fsnotify/fsnotify"
+)
 
 // Path.MkDir creates a directory at p. Allowed flags:
 //		- f (force):  Removes existing files/directories at p.
@@ -106,4 +110,21 @@ func analyzeFlagsMk(flagrunes []rune) mkFlags {
 	}
 
 	return flags
+}
+
+// --------------------------------- watch ---------------------------------- //
+
+// MkWatch returns a Watch from the fsnotify Package, which can be used to
+// efficiently receive notifications for any events occuring on the specified
+// file or directory. For further information refer to the fsnotify
+// documentation.
+func (p Path) MkWatch() (*fsnotify.Watcher, error) {
+	w, err := fsnotify.NewWatcher()
+	if err != nil {
+		return w, err
+	}
+
+	w.Add(string(p))
+
+	return w, nil
 }
