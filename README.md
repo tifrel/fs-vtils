@@ -26,11 +26,11 @@ It provides a `Path` type to give additional type safety over strings. The defin
 e.g.
 
     fileA.Cp(fileB, 'f')
-    
-which copies the file from path `fileA` to `fileB`. The `f` flag (force) tells the command to remove anything existing a `fileB`, if needed.
+
+which copies the file from path `fileA` to `fileB`. The `f` flag (force) tells the command to remove anything existing at `fileB`, if needed.
 
 Full documentation will be added in the near future.
-Until then you can look it up as comments above the exported functions in the source code.
+Until then you can look it up everything in the comments above the exported functions in the source code.
 
 
 ## Disclaimer
@@ -47,4 +47,4 @@ In the case you encounter an error or any unexpected behaviour, feel free to ope
 - Write full documentation
 - Further testing (current status: 50% of commands successfully tested)
 - Improve this README
-- `chmod` and `chown`
+- Further methods: `Path.Chmod()`, `Path.Chown()`, `Path.Owner()`
