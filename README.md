@@ -1,5 +1,7 @@
 # FS VTILS
 
+[![GoDoc](https://godoc.org/github.com/tillyboy/fs-vtils?status.svg)](https://godoc.org/github.com/tillyboy/fs-vtils)
+
 <!-- SEO (yup, I want this to get used)
   fs filesystem file system files util utils utility utilities utility method methods function functions io input output
   cp copy copying mv move moving rename renaming ln link linking symlink hardlink dereference target
