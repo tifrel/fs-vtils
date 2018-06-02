@@ -31,8 +31,7 @@ e.g.
 
 which copies the file from path `fileA` to `fileB`. The `f` flag (force) tells the command to remove anything existing at `fileB`, if needed.
 
-Full documentation will be added in the near future.
-Until then you can look it up everything in the comments above the exported functions in the source code.
+Full documentation is available on [godoc.org](https://godoc.org/github.com/tillyboy/fs-vtils)
 
 
 ## Disclaimer
@@ -46,7 +45,6 @@ In the case you encounter an error or any unexpected behaviour, feel free to ope
 
 ## Roadmap
 
-- Write full documentation
 - Further testing (current status: 50% of commands successfully tested)
 - Improve this README
 - Further methods: `Path.Chmod()`, `Path.Chown()`, `Path.Owner()`
