@@ -13,7 +13,7 @@ import "os"
 // two mandatory flags: mergemode: c(opy) vs m(ove)
 // 											conflicts: d(estination) vs t(arget) vs f(ail)
 
-// Path.Mv moves (renames) the file at p to target. Allowed flags:
+// Mv moves (renames) the file at p to target. Allowed flags:
 //		- f (force):     Removes existing files/directories at target.
 //		- p (parent):    Creates any dirs necessary to accomodate target.
 //		- r (recursive): Moves directories, including any files, subdirectories
@@ -25,9 +25,8 @@ func (p Path) Mv(target Path, flags ...rune) error {
 		err, ok := pnc.(error)
 		if ok {
 			return err
-		} else {
-			panic(pnc)
 		}
+		panic(pnc)
 	}
 
 	return mv(p, target, _flags)

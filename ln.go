@@ -5,7 +5,7 @@ import "os"
 // TODO: testing
 // TODO: d flag -> dereferencing (recursive)
 
-// Path.Ln creates a symlink at target, pointing to p. Allowed flags:
+// Ln creates a symlink at target, pointing to p. Allowed flags:
 //		- f (force):    Removes existing files/directories at target.
 //		- h (hardlink): Creates a hardlink instead of a symlink.
 //		- p (parent):   Creates any dirs necessary to accomodate target.
@@ -16,9 +16,8 @@ func (p Path) Ln(target Path, flags ...rune) error {
 		err, ok := pnc.(error)
 		if ok {
 			return err
-		} else {
-			panic(pnc)
 		}
+		panic(pnc)
 	}
 
 	return ln(p, target, _flags)
@@ -36,9 +35,8 @@ func ln(p, target Path, flags lnFlags) error {
 
 	if flags.h {
 		return os.Link(string(p), string(target))
-	} else {
-		return os.Symlink(string(p), string(target))
 	}
+	return os.Symlink(string(p), string(target))
 }
 
 type lnFlags struct{ d, f, h, p bool }

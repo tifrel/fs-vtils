@@ -6,7 +6,7 @@ import (
 	"github.com/fsnotify/fsnotify"
 )
 
-// Path.MkDir creates a directory at p. Allowed flags:
+// MkDir creates a directory at p. Allowed flags:
 //		- f (force):  Removes existing files/directories at p.
 //		- p (parent): Creates any dirs necessary to accomodate target.
 func (p Path) MkDir(flags ...rune) error {
@@ -16,15 +16,14 @@ func (p Path) MkDir(flags ...rune) error {
 		err, ok := pnc.(error)
 		if ok {
 			return err
-		} else {
-			panic(pnc)
 		}
+		panic(pnc)
 	}
 
 	return mkDir(p, _flags)
 }
 
-// Path.MkFile creates a (regular) file at p. Allowed flags:
+// MkFile creates a (regular) file at p. Allowed flags:
 //		- f (force) : Removes existing files/directories at p.
 //    - p (parent): Creates any dirs necessary to accomodate target.
 func (p Path) MkFile(perm os.FileMode, flags ...rune) error {
@@ -34,9 +33,8 @@ func (p Path) MkFile(perm os.FileMode, flags ...rune) error {
 		err, ok := pnc.(error)
 		if ok {
 			return err
-		} else {
-			panic(pnc)
 		}
+		panic(pnc)
 	}
 
 	return mkFile(p, perm, _flags)

@@ -15,10 +15,10 @@ func (p Path) Hash() (hash.Hash64, error) {
 	// parallel/ optimized execution because this is an expensive operation
 	// io + hashing
 	var (
-		h         = fnv.New64()
-		ch        = make(chan []byte)
-		ERR error = nil
-		err error = nil
+		h   = fnv.New64()
+		ch  = make(chan []byte)
+		ERR error
+		err error
 	)
 
 	f, err := os.Open(string(p))
@@ -92,10 +92,10 @@ func (p1 Path) SameContentsAs(p2 Path) (bool, error) {
 	defer f2.Close()
 
 	var (
-		buf1       = make([]byte, bufSize)
-		buf2       = make([]byte, bufSize)
-		err1 error = nil
-		err2 error = nil
+		buf1 = make([]byte, bufSize)
+		buf2 = make([]byte, bufSize)
+		err1 error
+		err2 error
 		n1   int
 		n2   int
 
@@ -131,9 +131,11 @@ func (p1 Path) SameContentsAs(p2 Path) (bool, error) {
 	return true, nil
 }
 
+// SameInfoAs compares the files located at p1 and p2 by their os.FileInfo.
+//
+// Attention: Windows compares by path in this case, so two files pointing
+// at the same inode may erroneously be reported as not the same file.
 func (p1 Path) SameInfoAs(p2 Path) (bool, error) {
-	// ATTENTION: Windows compares by path, which opens up the possibility of
-	//    erroneously false results
 	n1, err := p1.Info()
 	if err != nil {
 		return false, err

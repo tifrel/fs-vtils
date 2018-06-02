@@ -7,7 +7,7 @@ import "os"
 
 // TODO: testing
 
-// Path.Rm removes the file located at p. Allowed flags:
+// Rm removes the file located at p. Allowed flags:
 //		- r (recursive): Deletes directories, including any files, subdirectories
 //				etc.
 func (p Path) Rm(flags ...rune) error {
@@ -17,9 +17,8 @@ func (p Path) Rm(flags ...rune) error {
 		err, ok := pnc.(error)
 		if ok {
 			return err
-		} else {
-			panic(pnc)
 		}
+		panic(pnc)
 	}
 
 	return rm(p, _flags)
@@ -37,9 +36,8 @@ func rm(p Path, flags struct{ r bool }) error {
 		return MISSING_REC_FLAG.new(_PATH_EMPTY, _FLAG_EMPTY)
 	} else if flags.r {
 		return os.RemoveAll(string(p))
-	} else {
-		return os.Remove(string(p))
 	}
+	return os.Remove(string(p))
 }
 
 func analyzeFlagsRm(flagrunes []rune) struct{ r bool } {

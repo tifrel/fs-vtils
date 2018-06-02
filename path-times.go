@@ -32,15 +32,15 @@ func (p Path) Times() (atime, ctime, mtime, btime time.Time, err error) {
 	return
 }
 
-// Returns the access time of a file. The access time of a file is updated when
-// a file is opened.
+// Atime returns the access time of a file. The access time of a file is updated
+// when a file is opened.
 func (p Path) Atime() (time.Time, error) {
 	atime, _, _, _, err := p.Times()
 	return atime, err
 }
 
-// Returns the change time of a file. The change time of a file is updated when
-// the file is modified, including metadata e.g. permissions, owner etc.
+// Ctime returns the change time of a file. The change time of a file is updated
+// when the file is modified, including metadata e.g. permissions, owner etc.
 // Not supported on Plan9 or Windows version older than (and including) XP.
 func (p Path) Ctime() (time.Time, error) {
 	_, ctime, _, _, err := p.Times()
@@ -52,15 +52,15 @@ func (p Path) Ctime() (time.Time, error) {
 	return ctime, err
 }
 
-// Returns the mod time of a file. The mod time of a file is updated when the
-// file is modified, excluding metadata. (Contents modification only)
+// Mtime returns the mod time of a file. The mod time of a file is updated when
+// the file is modified, excluding metadata. (Contents modification only)
 func (p Path) Mtime() (time.Time, error) {
 	_, _, mtime, _, err := p.Times()
 	return mtime, err
 }
 
-// Returns the birth time of a file. Birth time of a file is never updated.
-// Supported only on Windows, NetBSD, FreeBSD and Darwin (macOS).
+// Btime returns the birth time of a file. Birth time of a file is never
+// updated. Supported only on Windows, NetBSD, FreeBSD and Darwin (macOS).
 func (p Path) Btime() (time.Time, error) {
 	_, _, _, btime, err := p.Times()
 	if err != nil {

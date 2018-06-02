@@ -4,6 +4,9 @@ import (
 	"os"
 )
 
+// Path is the main type of this package. It provides additional type safety
+// over the usage of strings as paths and anything revolving around paths and
+// files (inodes) can be defined as a method on the new type.
 type Path string
 
 // -------------------------- information methods --------------------------- //

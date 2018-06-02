@@ -7,7 +7,7 @@ import (
 
 // TODO: cpDir, cpSymlink, cpFile
 
-// Path.Cp creates a file at target and writes the contents of p to it. Allowed
+// Cp creates a file at target and writes the contents of p to it. Allowed
 // flags:
 //		- d (dereference): Copies the contents of a symlinks target instead of the
 //				link itself. Dereferencing happens recursively until a non-symlink is
@@ -27,9 +27,8 @@ func (p Path) Cp(target Path, flags ...rune) error {
 		err, ok := pnc.(error)
 		if ok {
 			return err
-		} else {
-			panic(pnc)
 		}
+		panic(pnc)
 	}
 
 	return cp(p, target, _flags)
@@ -50,18 +49,16 @@ func cp(p, target Path, flags cpFlags) error {
 		dereferenced, err := p.Follow()
 		if err != nil {
 			return err
-		} else {
-			return ln(dereferenced, target, flags.toLn())
 		}
+		return ln(dereferenced, target, flags.toLn())
 
 	} else if isSymlink && flags.d {
 
 		dereferenced, err := p.Target()
 		if err != nil {
 			return err
-		} else {
-			return ln(dereferenced, target, flags.toLn())
 		}
+		return ln(dereferenced, target, flags.toLn())
 
 	}
 
@@ -80,11 +77,10 @@ func cp(p, target Path, flags cpFlags) error {
 		err = mkDir(target, flags.toMk())
 		if err != nil {
 			return err
-		} else {
-			return es.Each(func(e Path) error {
-				return cp(e, target.Append(e.Base()), flags)
-			})
 		}
+		return es.Each(func(e Path) error {
+			return cp(e, target.Append(e.Base()), flags)
+		})
 
 	} else {
 		// handling regular files
@@ -101,9 +97,9 @@ func cpContents(sp Path, tp Path) error {
 	// Assumes that destination and target already exist. Takes care of opening
 	// and closing the files. Deletes target if operation fails.
 	var (
-		buf        = make([]byte, bufSize)
-		sErr error = nil
-		tErr error = nil
+		buf  = make([]byte, bufSize)
+		sErr error
+		tErr error
 	)
 
 	s, sErr := os.OpenFile(string(sp), os.O_RDONLY, 0644)

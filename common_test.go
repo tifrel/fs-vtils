@@ -51,7 +51,7 @@ func (t testFsvErr) passes() (bool, error) {
 		return false, result
 	}
 
-	fsve, ok := t.expect().(fsv.Err)
+	fsve, ok := t.expect().(fsv.Error)
 	if !ok {
 		return false, result
 	}

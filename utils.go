@@ -67,12 +67,13 @@ func isOsFileInfo(name string) bool {
 //    (fits 800 lines at 80 width)
 var bufSize uint = 1 << 16
 
-// Sets the buffersize for operations like reading, writing and copying.
+// SetBufferSize sets the buffersize for operations like reading, writing and
+// copying.
 func SetBufferSize(n uint) {
 	bufSize = n
 }
 
-// Restores a buffersize of 65536 bytes (64KiB)
+// ResetBufferSize restores a buffersize of 65536 bytes (64KiB)
 func ResetBufferSize() {
 	bufSize = 1 << 16
 }

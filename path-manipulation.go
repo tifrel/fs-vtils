@@ -24,26 +24,29 @@ func (p Path) Dir() Path {
 	return Path(pathPkg.Dir(string(p)))
 }
 
-// AppendStr is like Append, but takes a string as argument instead of a Path
+// AppendStr is like Append, but takes a string as argument instead of a Path.
 func (p Path) AppendStr(x string) Path {
 	return Path(pathPkg.Join(string(p), x))
 }
 
-// BaseStr is like Base, but returns a string instead of a Path
+// BaseStr is like Base, but returns a string instead of a Path.
 func (p Path) BaseStr() string {
 	return pathPkg.Base(string(p))
 }
 
-// DirStr is like Dir, but returns a string instead of a Path
+// DirStr is like Dir, but returns a string instead of a Path.
 func (p Path) DirStr() string {
 	return pathPkg.Dir(string(p))
 }
 
+// RelativeTo returns the Path that p has relative to dir.
 func (p Path) RelativeTo(dir Path) (Path, error) {
 	rel, err := filepath.Rel(string(dir), string(p))
 	return Path(rel), err
 }
 
+// RelativeToStr is like RelativeTo, but takes a string as argument instead of a
+// Path.
 func (p Path) RelativeToStr(dir string) (Path, error) {
 	rel, err := filepath.Rel(dir, string(p))
 	return Path(rel), err

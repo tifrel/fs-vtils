@@ -5,12 +5,15 @@ import (
 	"os"
 )
 
+// PathList is a collection of paths, typically retrieved via Path.Ls().
 type PathList []Path
 
-func (in PathList) Filter(pred func(Path) bool) PathList {
-	out, i := make([]Path, len(in)), 0
+// Filter removes all Paths from a PathList, that do not satisfy the given
+// predicate.
+func (ps PathList) Filter(pred func(Path) bool) PathList {
+	out, i := make([]Path, len(ps)), 0
 
-	for _, p := range in {
+	for _, p := range ps {
 		if pred(p) {
 			out[i] = p
 			i++
@@ -20,6 +23,7 @@ func (in PathList) Filter(pred func(Path) bool) PathList {
 	return out[:i]
 }
 
+// Names returns only the basenames of the Paths in a PathList.
 func (ps PathList) Names() []string {
 	out := make([]string, len(ps))
 	for i, p := range ps {
@@ -28,6 +32,7 @@ func (ps PathList) Names() []string {
 	return out
 }
 
+// Infos returns a list of os.FileInfos from a PathList.
 func (ps PathList) Infos() ([]os.FileInfo, error) {
 	var (
 		out = make([]os.FileInfo, len(ps))
@@ -46,13 +51,16 @@ func (ps PathList) Infos() ([]os.FileInfo, error) {
 	return out, nil
 }
 
+// Each applies a function to each Path in a PathList. Encountered errors
+// accumulate and do not abort subsequent actions.
 func (ps PathList) Each(fn func(Path) error) error {
-	var ERR error = nil
+	var ERR error
 
 	for _, p := range ps {
 		err := fn(p)
 
 		if err != nil {
+			// TODO: make ERR a []error, that satisfies the error interface itself
 			msg := string(p) + " :: " + err.Error()
 
 			if ERR == nil {
