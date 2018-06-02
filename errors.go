@@ -3,7 +3,7 @@ package fsv
 type errNumber uint8
 
 const (
-	no_INVALID_FLAG errNumber = 1 + iota
+	no_INVALID_FLAG uint = 1 + iota
 	no_OCCUPIED_PATH
 	no_MISSING_TARGETDIR
 	no_MISSING_REC_FLAG
@@ -12,12 +12,12 @@ const (
 )
 
 var (
-	INVALID_FLAG       = Err{no_INVALID_FLAG, _PATH_EMPTY, _FLAG_EMPTY}
-	OCCUPIED_PATH      = Err{no_OCCUPIED_PATH, _PATH_EMPTY, _FLAG_EMPTY}
-	MISSING_TARGETDIR  = Err{no_MISSING_TARGETDIR, _PATH_EMPTY, _FLAG_EMPTY}
-	MISSING_REC_FLAG   = Err{no_MISSING_REC_FLAG, _PATH_EMPTY, _FLAG_EMPTY}
-	MISSING_OS_SUPPORT = Err{no_MISSING_OS_SUPPORT, _PATH_EMPTY, _FLAG_EMPTY}
-	UNKNOWN_ERR        = Err{no_UNKNOWN_ERR, _PATH_EMPTY, _FLAG_EMPTY}
+	INVALID_FLAG       = Error{no_INVALID_FLAG, _PATH_EMPTY, _FLAG_EMPTY}
+	OCCUPIED_PATH      = Error{no_OCCUPIED_PATH, _PATH_EMPTY, _FLAG_EMPTY}
+	MISSING_TARGETDIR  = Error{no_MISSING_TARGETDIR, _PATH_EMPTY, _FLAG_EMPTY}
+	MISSING_REC_FLAG   = Error{no_MISSING_REC_FLAG, _PATH_EMPTY, _FLAG_EMPTY}
+	MISSING_OS_SUPPORT = Error{no_MISSING_OS_SUPPORT, _PATH_EMPTY, _FLAG_EMPTY}
+	UNKNOWN_ERR        = Error{no_UNKNOWN_ERR, _PATH_EMPTY, _FLAG_EMPTY}
 )
 
 const (
@@ -25,13 +25,13 @@ const (
 	_PATH_EMPTY Path = ""
 )
 
-type Err struct {
-	Id   errNumber
+type Error struct {
+	Id   uint
 	Path Path
 	Flag rune
 }
 
-func (e Err) Error() string {
+func (e Error) Error() string {
 	switch e.Id {
 	case no_INVALID_FLAG:
 		return "Invalid flag: " + string(e.Flag)
@@ -57,8 +57,8 @@ func (e Err) Error() string {
 
 }
 
-func (proto Err) new(path Path, flag rune) Err {
-	return Err{
+func (proto Error) new(path Path, flag rune) Error {
+	return Error{
 		proto.Id,
 		path,
 		flag,
@@ -67,7 +67,7 @@ func (proto Err) new(path Path, flag rune) Err {
 
 // TODO: errors for PathList.Each, to which the returned errors will be appended
 
-func (proto Err) IsTypeOf(e error) bool {
+func (proto Error) IsTypeOf(e error) bool {
 	switch {
 	case e == nil && error(proto) == nil:
 		return true
@@ -77,7 +77,7 @@ func (proto Err) IsTypeOf(e error) bool {
 		return false
 	}
 
-	fsve, ok := e.(Err)
+	fsve, ok := e.(Error)
 	if !ok {
 		return false
 	}
