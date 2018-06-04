@@ -2,9 +2,6 @@ package fsv
 
 import "os"
 
-// TODO: testing
-// TODO: d flag -> dereferencing (recursive)
-
 // Ln creates a symlink at target, pointing to p. Allowed flags:
 //		- f (force):    Removes existing files/directories at target.
 //		- h (hardlink): Creates a hardlink instead of a symlink.

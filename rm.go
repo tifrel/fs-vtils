@@ -5,8 +5,6 @@ import "os"
 // later TODO: flag for wiping hdd space
 // https://www.socketloop.com/tutorials/golang-secure-file-deletion-with-wipe-example
 
-// TODO: testing
-
 // Rm removes the file located at p. Allowed flags:
 //		- r (recursive): Deletes directories, including any files, subdirectories
 //				etc.

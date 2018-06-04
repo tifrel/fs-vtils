@@ -2,17 +2,6 @@ package fsv
 
 import "os"
 
-// TODO: Path.Merge(merges two dirs) vs i/m flag (merge/integrate)
-// pros Path.Merge:
-//		- simpler
-//		-
-// cons Path.Merge:
-//		- default to either copy or moving
-//		-
-//
-// two mandatory flags: mergemode: c(opy) vs m(ove)
-// 											conflicts: d(estination) vs t(arget) vs f(ail)
-
 // Mv moves (renames) the file at p to target. Allowed flags:
 //		- f (force):     Removes existing files/directories at target.
 //		- p (parent):    Creates any dirs necessary to accomodate target.
