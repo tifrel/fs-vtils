@@ -81,48 +81,6 @@ func ResetBufferSize() {
 // ------------------------- fs manipulation utils -------------------------- //
 
 // force + existing => delete; not force + existing => error; else => nil
-func create(target Path, force, parent bool, perm os.FileMode) error {
-	err := prepareBase(target, force)
-	if err != nil {
-		return err
-	}
-
-	err = prepareDir(target, parent)
-	if err != nil {
-		return err
-	}
-
-	return target.MkFile(perm)
-}
-
-func prepareBase(target Path, force bool) error {
-	switch {
-	case !target.Exists():
-		return nil
-	case force:
-		return target.Rm()
-	case !force:
-		return OCCUPIED_PATH.new(target, _FLAG_EMPTY)
-	}
-
-	return UNKNOWN_ERR.new(_PATH_EMPTY, _FLAG_EMPTY)
-}
-
-func prepareDir(target Path, parent bool) error {
-
-	// check for parent dir existence and process parent flag
-	dir := target.Dir()
-	if parent && !dir.Exists() {
-		os.MkdirAll(string(dir), 0755)
-	} else if !parent && !dir.Exists() {
-		return MISSING_TARGETDIR.new(dir, _FLAG_EMPTY)
-	}
-
-	return nil
-	// later TODO: this fails if there is a file anywhere on the path blocking
-	// creation of a dir
-}
-
 func prepareLocation(p Path, flags mkFlags) error {
 	targetExists := p.Exists()
 	if targetExists && !flags.f {
