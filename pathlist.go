@@ -1,7 +1,6 @@
 package fsv
 
 import (
-	"errors"
 	"os"
 )
 
@@ -54,23 +53,12 @@ func (ps PathList) Infos() ([]os.FileInfo, error) {
 // Each applies a function to each Path in a PathList. Encountered errors
 // accumulate and do not abort subsequent actions.
 func (ps PathList) Each(fn func(Path) error) error {
-	var ERR error
+	errs := ErrorList(make([]error, len(ps)))
 
-	for _, p := range ps {
+	for i, p := range ps {
 		err := fn(p)
-
-		if err != nil {
-			// TODO: make ERR a []error, that satisfies the error interface itself
-			msg := string(p) + " :: " + err.Error()
-
-			if ERR == nil {
-				ERR = errors.New(msg)
-			} else {
-				ERR = errors.New(ERR.Error() + "\n" + msg)
-			}
-		}
-
+		errs[i] = err
 	}
 
-	return ERR
+	return errs.errorize()
 }

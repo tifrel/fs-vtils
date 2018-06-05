@@ -26,12 +26,21 @@ type Error struct {
 // These are the error prototypes
 var (
 	INVALID_FLAG       = Error{no_INVALID_FLAG, _PATH_EMPTY, _FLAG_EMPTY}
-	OCCUPIED_PATH      = Error{no_OCCUPIED_PATH, _PATH_EMPTY, _FLAG_EMPTY}
-	MISSING_TARGETDIR  = Error{no_MISSING_TARGETDIR, _PATH_EMPTY, _FLAG_EMPTY}
-	MISSING_REC_FLAG   = Error{no_MISSING_REC_FLAG, _PATH_EMPTY, _FLAG_EMPTY}
 	MISSING_OS_SUPPORT = Error{no_MISSING_OS_SUPPORT, _PATH_EMPTY, _FLAG_EMPTY}
+	MISSING_REC_FLAG   = Error{no_MISSING_REC_FLAG, _PATH_EMPTY, _FLAG_EMPTY}
+	MISSING_TARGETDIR  = Error{no_MISSING_TARGETDIR, _PATH_EMPTY, _FLAG_EMPTY}
+	OCCUPIED_PATH      = Error{no_OCCUPIED_PATH, _PATH_EMPTY, _FLAG_EMPTY}
 	UNKNOWN_ERR        = Error{no_UNKNOWN_ERR, _PATH_EMPTY, _FLAG_EMPTY}
 )
+
+var ownErrs = []Error{
+	INVALID_FLAG,
+	MISSING_OS_SUPPORT,
+	MISSING_REC_FLAG,
+	MISSING_TARGETDIR,
+	OCCUPIED_PATH,
+	UNKNOWN_ERR,
+}
 
 func (e Error) Error() string {
 	switch e.Id {
@@ -67,8 +76,6 @@ func (proto Error) new(path Path, flag rune) Error {
 	}
 }
 
-// TODO: errors for PathList.Each, to which the returned errors will be appended
-
 // IsTypeOf determines wether an error (as defined by the interface) is of type
 // fsv.Error and wether both errors have the same prototype. The prototype
 // comparison is handled via the ID. Also returns true if both errors are nil.
@@ -91,4 +98,44 @@ func (proto Error) IsTypeOf(e error) bool {
 		return true
 	}
 	return false
+}
+
+func IsFSVErr(e error) bool {
+	for _, proto := range ownErrs {
+		if proto.IsTypeOf(e) {
+			return true
+		}
+	}
+	return false
+}
+
+// ErrorList is a specific kind of error for the PathList.Each() method. If it
+// does not encounter an error, it returns nil. Otherwise it return a slice of
+// errors, matching with the indices of the Paths in PathList.
+type ErrorList []error
+
+// Error method, so that the ErrorList itself satisfies the error interface.
+func (errs ErrorList) Error() string {
+	msg := ""
+	for i, err := range errs {
+		msg += string(i) + ": " + err.Error()
+	}
+	return msg
+}
+
+// to return nil if all errors inside are nil
+func (errs ErrorList) errorize() error {
+	rErrs := ErrorList(make([]error, len(errs)))
+	isNil := true
+	for i, err := range errs {
+		if err != nil {
+			isNil = false
+			rErrs[i] = err
+		}
+	}
+
+	if isNil {
+		return nil
+	}
+	return rErrs
 }
