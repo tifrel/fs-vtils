@@ -68,8 +68,7 @@ var cpTests = []testStruct{
 			path := testLocCp.AppendStr("case06/dirlink")
 			return path.Cp(testLocCp.AppendStr("case06/copied"), 'd')
 		},
-		_expect: nil,
-		// _expect: fsv.MISSING_REC_FLAG,
+		_expect: fsv.MISSING_REC_FLAG,
 	}, testFsvErr{
 
 		_name: "case07",
