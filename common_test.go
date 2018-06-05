@@ -9,23 +9,24 @@ import (
 
 // ------------------------------ test exports ------------------------------ //
 
-func TestMk(t *testing.T) {
-	runTests(append(mkDirTests, mkFileTests...), t)
-}
-func TestMv(t *testing.T) {
-	runTests(mvTests, t)
-}
-
-func TestRm(t *testing.T) {
-	runTests(rmTests, t)
+func TestCp(t *testing.T) {
+	runTests(cpTests, t)
 }
 
 func TestLn(t *testing.T) {
 	runTests(lnTests, t)
 }
 
-func TestCp(t *testing.T) {
-	runTests(cpTests, t)
+func TestMk(t *testing.T) {
+	runTests(append(mkDirTests, mkFileTests...), t)
+}
+
+func TestMv(t *testing.T) {
+	runTests(mvTests, t)
+}
+
+func TestRm(t *testing.T) {
+	runTests(rmTests, t)
 }
 
 // ------------------------------ test helpers ------------------------------ //
