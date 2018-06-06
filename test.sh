@@ -16,6 +16,8 @@ source $src/testdata/mv_tests.sh
 source $src/testdata/ln_tests.sh
 source $src/testdata/cp_tests.sh
 
+source $src/testdata/rw_tests.sh
+
 
 echo -e "\n# Resetting testing directories"
 reset_MkDir
@@ -24,6 +26,8 @@ reset_Rm
 reset_Mv
 reset_Ln
 reset_Cp
+
+reset_rw
 
 echo -e "\n# Running go tests"
 go test
@@ -38,6 +42,8 @@ evaluate_Rm
 evaluate_Mv
 evaluate_Ln
 evaluate_Cp
+
+evaluate_rw
 
 echo "PASS"
 
