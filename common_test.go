@@ -5,8 +5,6 @@ import (
 	"testing"
 )
 
-// TODO: testing of reading/writing/information methods
-
 // ------------------------------ test exports ------------------------------ //
 
 /**** Bash-like functions ****/
