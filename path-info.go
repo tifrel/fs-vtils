@@ -11,8 +11,6 @@ type Path string
 
 // -------------------------- information methods --------------------------- //
 
-// TODO: Grep(re string) (lineNo int, startByte int, stopByte int, line string, match string)
-
 // Exists checks wether a file (including directories, links etc.) exists at p.
 func (p Path) Exists() bool {
 	_, err := os.Stat(string(p))
@@ -146,4 +144,47 @@ func (p Path) IsHidden() bool {
 // IsVisible is the negation of IsHidden.
 func (p Path) IsVisible() bool {
 	return !p.IsHidden()
+}
+
+// Size returns the size of a file in bytes.
+func (p Path) Size() (int64, error) {
+	info, err := p.Info()
+	if err != nil {
+		return 0, err
+	} else if !info.Mode().IsRegular() {
+		return 0, FILE_OPERATION.new(p, _FLAG_EMPTY)
+	}
+
+	return info.Size(), nil
+}
+
+// CountRunes returns the length the file contents converted to a rune-slice.
+// This involves opening the file and converting its contents to an intermittent
+// string. Performance might be suboptimal.
+func (p Path) CountRunes() (int, error) {
+	bytes, err := p.ReadBytes()
+	if err != nil {
+		return 0, err
+	}
+	return len([]rune(string(bytes))), nil
+}
+
+// CountLines returns the amount of Newline-Characters ('\n') found in a file.
+// This involves reading the file and ranging over its contents. Performance
+// might be suboptimal.
+func (p Path) CountLines() (int, error) {
+	contents, err := p.ReadString()
+	if err != nil {
+		return 0, err
+	}
+	c := 0
+
+	for r := range []rune(contents) {
+		if r == '\n' {
+			c++
+		}
+	}
+
+	// -1 to remove trailing newline: TODO: do or don't?
+	return c - 1, nil
 }
