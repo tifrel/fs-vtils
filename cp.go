@@ -5,8 +5,6 @@ import (
 	"os"
 )
 
-// TODO: cpDir, cpSymlink, cpFile
-
 // Cp creates a file at target and writes the contents of p to it. Allowed
 // flags:
 //		- d (dereference): Copies the contents of a symlinks target instead of the
@@ -41,59 +39,64 @@ func cp(p, target Path, flags cpFlags) error {
 	}
 
 	// handling symlinks
-	isSymlink, err := p.IsSymlink()
-	if err != nil {
+	if isSymlink, err := p.IsSymlink(); err != nil {
 		return err
-	} else if isSymlink && !flags.d {
-
-		dereferenced, err := p.Follow()
-		if err != nil {
-			return err
-		}
-		return ln(dereferenced, target, flags.toLn())
-
-	} else if isSymlink && flags.d {
-
-		dereferenced, err := p.Target()
-		if err != nil {
-			return err
-		}
-		return ln(dereferenced, target, flags.toLn())
-
+	} else if isSymlink {
+		return cpSymlink(p, target, flags)
 	}
 
 	// handling directories
 	info, err := p.Info()
 	if err != nil {
 		return err
-	} else if !flags.r && info.IsDir() {
-		return MISSING_REC_FLAG.new(_PATH_EMPTY, _FLAG_EMPTY)
-	} else if flags.r && info.IsDir() {
-		es, err := p.Ls()
-		if err != nil {
-			return err
-		}
-
-		err = mkDir(target, flags.toMk())
-		if err != nil {
-			return err
-		}
-		return es.Each(func(e Path) error {
-			return cp(e, target.Append(e.Base()), flags)
-		})
-
-	} else {
-		// handling regular files
-		err = target.MkFile(info.Mode())
-		if err != nil {
-			return err
-		}
+	} else if info.IsDir() {
+		return cpDir(p, target, flags)
 	}
 
-	return cpContents(p, target)
+	// handling regular files
+	err = target.MkFile(info.Mode())
+	if err != nil {
+		return err
+	}
+
+	return cpFile(p, target)
 }
 
-func cpContents(sp Path, tp Path) error {
+func cpSymlink(p, target Path, flags cpFlags) error {
+	if flags.d {
+		dereferenced, err := p.Target()
+		if err != nil {
+			return err
+		}
+		return cp(dereferenced, target, flags)
+	}
+
+	dereferenced, err := p.Follow()
+	if err != nil {
+		return err
+	}
+	return ln(dereferenced, target, flags.toLn())
+}
+
+func cpDir(p, target Path, flags cpFlags) error {
+	if !flags.r {
+		return MISSING_REC_FLAG.new(_PATH_EMPTY, _FLAG_EMPTY)
+	}
+	es, err := p.Ls()
+	if err != nil {
+		return err
+	}
+
+	err = mkDir(target, flags.toMk())
+	if err != nil {
+		return err
+	}
+	return es.Each(func(e Path) error {
+		return cp(e, target.Append(e.Base()), flags)
+	})
+}
+
+func cpFile(sp Path, tp Path) error {
 	// Assumes that destination and target already exist. Takes care of opening
 	// and closing the files. Deletes target if operation fails.
 	var (
