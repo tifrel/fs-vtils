@@ -1,7 +1,8 @@
 package fsv
 
 const (
-	no_INVALID_FLAG uint = 1 + iota
+	no_FILE_OPERATION uint = 1 + iota
+	no_INVALID_FLAG
 	no_OCCUPIED_PATH
 	no_MISSING_TARGETDIR
 	no_MISSING_REC_FLAG
@@ -25,6 +26,7 @@ type Error struct {
 
 // These are the error prototypes
 var (
+	FILE_OPERATION     = Error{no_FILE_OPERATION, _PATH_EMPTY, _FLAG_EMPTY}
 	INVALID_FLAG       = Error{no_INVALID_FLAG, _PATH_EMPTY, _FLAG_EMPTY}
 	MISSING_OS_SUPPORT = Error{no_MISSING_OS_SUPPORT, _PATH_EMPTY, _FLAG_EMPTY}
 	MISSING_REC_FLAG   = Error{no_MISSING_REC_FLAG, _PATH_EMPTY, _FLAG_EMPTY}
@@ -34,6 +36,7 @@ var (
 )
 
 var ownErrs = []Error{
+	FILE_OPERATION,
 	INVALID_FLAG,
 	MISSING_OS_SUPPORT,
 	MISSING_REC_FLAG,
@@ -44,6 +47,9 @@ var ownErrs = []Error{
 
 func (e Error) Error() string {
 	switch e.Id {
+	case no_FILE_OPERATION:
+		return "File-only operation on non-file: " + string(e.Path)
+
 	case no_INVALID_FLAG:
 		return "Invalid flag: " + string(e.Flag)
 
