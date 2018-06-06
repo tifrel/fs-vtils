@@ -17,13 +17,13 @@ import (
 // case10: targets parent doesn't exist & no p flag => error
 // case11x: targets parent doesn't exist & p flag => no error
 
-var testLocLn = testDir.AppendStr("Ln")
+var lnTestLoc = testDir.AppendStr("Ln")
 var lnTests = []testStruct{
 	testFsvErr{
 		_name: "case01",
 		modify: func() error {
-			path := testLocLn.AppendStr("case01/file")
-			return path.Ln(testLocLn.AppendStr("case01/newlink"))
+			path := lnTestLoc.AppendStr("case01/file")
+			return path.Ln(lnTestLoc.AppendStr("case01/newlink"))
 		},
 		_expect: nil,
 	},
@@ -31,8 +31,8 @@ var lnTests = []testStruct{
 	testFsvErr{
 		_name: "case02",
 		modify: func() error {
-			path := testLocLn.AppendStr("case02/oldlink")
-			return path.Ln(testLocLn.AppendStr("case02/newlink"))
+			path := lnTestLoc.AppendStr("case02/oldlink")
+			return path.Ln(lnTestLoc.AppendStr("case02/newlink"))
 		},
 		_expect: nil,
 	},
@@ -40,8 +40,8 @@ var lnTests = []testStruct{
 	testFsvErr{
 		_name: "case03",
 		modify: func() error {
-			path := testLocLn.AppendStr("case03/dir")
-			return path.Ln(testLocLn.AppendStr("case03/newlink"))
+			path := lnTestLoc.AppendStr("case03/dir")
+			return path.Ln(lnTestLoc.AppendStr("case03/newlink"))
 		},
 		_expect: nil,
 	},
@@ -49,8 +49,8 @@ var lnTests = []testStruct{
 	testFsvErr{
 		_name: "case04",
 		modify: func() error {
-			path := testLocLn.AppendStr("case04/file")
-			return path.Ln(testLocLn.AppendStr("case04/newlink"), 'h')
+			path := lnTestLoc.AppendStr("case04/file")
+			return path.Ln(lnTestLoc.AppendStr("case04/newlink"), 'h')
 		},
 		_expect: nil,
 	},
@@ -58,8 +58,8 @@ var lnTests = []testStruct{
 	testFsvErr{
 		_name: "case05",
 		modify: func() error {
-			path := testLocLn.AppendStr("case05/file")
-			return path.Ln(testLocLn.AppendStr("case05/newlink"), 'd')
+			path := lnTestLoc.AppendStr("case05/file")
+			return path.Ln(lnTestLoc.AppendStr("case05/newlink"), 'd')
 		},
 		_expect: nil,
 	},
@@ -67,8 +67,8 @@ var lnTests = []testStruct{
 	testFsvErr{
 		_name: "case06",
 		modify: func() error {
-			path := testLocLn.AppendStr("case06/oldlink")
-			return path.Ln(testLocLn.AppendStr("case06/newlink"), 'd')
+			path := lnTestLoc.AppendStr("case06/oldlink")
+			return path.Ln(lnTestLoc.AppendStr("case06/newlink"), 'd')
 		},
 		_expect: nil,
 	},
@@ -76,8 +76,8 @@ var lnTests = []testStruct{
 	testFsvErr{
 		_name: "case07",
 		modify: func() error {
-			path := testLocLn.AppendStr("case07/oldlink")
-			return path.Ln(testLocLn.AppendStr("case07/newlink"), 'd', 'h')
+			path := lnTestLoc.AppendStr("case07/oldlink")
+			return path.Ln(lnTestLoc.AppendStr("case07/newlink"), 'd', 'h')
 		},
 		_expect: nil,
 	},
@@ -85,8 +85,8 @@ var lnTests = []testStruct{
 	testFsvErr{
 		_name: "case08",
 		modify: func() error {
-			path := testLocLn.AppendStr("case08/file")
-			return path.Ln(testLocLn.AppendStr("case08/oldlink"))
+			path := lnTestLoc.AppendStr("case08/file")
+			return path.Ln(lnTestLoc.AppendStr("case08/oldlink"))
 		},
 		_expect: fsv.OCCUPIED_PATH,
 	},
@@ -94,9 +94,9 @@ var lnTests = []testStruct{
 	testFsvErr{
 		_name: "case09",
 		modify: func() error {
-			path := testLocLn.AppendStr("case09/file2")
+			path := lnTestLoc.AppendStr("case09/file2")
 			_ = path.MkFile(0644)
-			return path.Ln(testLocLn.AppendStr("case09/oldlink"), 'f')
+			return path.Ln(lnTestLoc.AppendStr("case09/oldlink"), 'f')
 		},
 		_expect: nil,
 	},
@@ -104,8 +104,8 @@ var lnTests = []testStruct{
 	testFsvErr{
 		_name: "case10",
 		modify: func() error {
-			path := testLocLn.AppendStr("case10/file")
-			return path.Ln(testLocLn.AppendStr("case10/newdir/newlink"))
+			path := lnTestLoc.AppendStr("case10/file")
+			return path.Ln(lnTestLoc.AppendStr("case10/newdir/newlink"))
 		},
 		_expect: fsv.MISSING_TARGETDIR,
 	},
@@ -113,8 +113,8 @@ var lnTests = []testStruct{
 	testFsvErr{
 		_name: "case11",
 		modify: func() error {
-			path := testLocLn.AppendStr("case11/file")
-			return path.Ln(testLocLn.AppendStr("case11/newdir/newlink"), 'p')
+			path := lnTestLoc.AppendStr("case11/file")
+			return path.Ln(lnTestLoc.AppendStr("case11/newdir/newlink"), 'p')
 		},
 		_expect: nil,
 	},
