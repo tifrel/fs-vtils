@@ -9,6 +9,7 @@ import (
 
 // ------------------------------ test exports ------------------------------ //
 
+/**** Bash-like functions ****/
 func TestCp(t *testing.T) {
 	runTests(cpTests, t)
 }
@@ -28,6 +29,17 @@ func TestMv(t *testing.T) {
 func TestRm(t *testing.T) {
 	runTests(rmTests, t)
 }
+
+/**** Reads & Writes ****/
+func TestRW(t *testing.T) {
+	runTests(rwTests, t)
+}
+
+/**** Information methods ****/
+
+/**** Manipulation methods ****/
+
+/**** Hashing and comparison methods ****/
 
 // ------------------------------ test helpers ------------------------------ //
 
@@ -117,4 +129,37 @@ func runTests(tests []testStruct, t *testing.T) {
 		}
 	}
 
+}
+
+type testValFn struct {
+	_name    string
+	validate func() (bool, error)
+	_expect  func(error) bool
+	_example error
+}
+
+func (t testValFn) name() string {
+	return t._name
+}
+
+func (t testValFn) passes() (bool, error) {
+	ok, err := t.validate()
+	if !ok {
+		return ok, err
+	}
+
+	switch {
+	case err == nil && t._expect == nil:
+		return true, err
+	case err != nil && t._expect == nil:
+		return false, err
+	case err == nil && t._expect != nil:
+		return false, err
+	}
+
+	return t._expect(err), err
+}
+
+func (t testValFn) expect() error {
+	return t._example
 }
