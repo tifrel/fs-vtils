@@ -3,3 +3,10 @@ _*.go
 *.bak
 TODO
 .gitignore
+
+testdata/Cp/*
+testdata/Ln/*
+testdata/Mk/*
+testdata/Mv/*
+testdata/Rm/*
+testdata/rw/*
