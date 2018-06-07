@@ -43,6 +43,13 @@ func checkRead(e error) {
 	}
 }
 
+func closeOrPanic(f *os.File) {
+	err := f.Close()
+	if err != nil {
+		panic(err)
+	}
+}
+
 // ----------------------------- file utilities ----------------------------- //
 
 func isOsFileInfo(name string) bool {

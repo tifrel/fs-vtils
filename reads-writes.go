@@ -81,7 +81,7 @@ func (p Path) AppendBytes(bytes []byte) error {
 	if err != nil {
 		return err
 	}
-	defer f.Close()
+	defer closeOrPanic(f)
 
 	_, err = f.Write(bytes)
 	return err
