@@ -10,7 +10,6 @@ import (
 // case04: reading, file is empty => no error
 // case05: reading, file has contents => no error
 // case06: reading, file doesn't exist => error
-// TODO: case07-11 with bash
 // case07: appending, file is empty => no error
 // case08: appending, file has contents => no error
 // case09: appending, file doesn't exist => error

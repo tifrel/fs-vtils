@@ -17,6 +17,7 @@ source $src/testdata/ln_tests.sh
 source $src/testdata/cp_tests.sh
 
 source $src/testdata/rw_tests.sh
+source $src/testdata/misc_tests.sh
 
 
 echo -e "\n# Resetting testing directories"
@@ -28,6 +29,7 @@ reset_Ln
 reset_Cp
 
 reset_rw
+reset_misc
 
 echo -e "\n# Running go tests"
 go test

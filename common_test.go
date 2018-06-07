@@ -38,8 +38,52 @@ func TestRW(t *testing.T) {
 /**** Manipulation methods ****/
 
 /**** Hashing and comparison methods ****/
+func TestHash(t *testing.T) {
+	runValTests(hashTests, t)
+}
 
-// ------------------------------ test helpers ------------------------------ //
+// ------------------------- test runner functions -------------------------- //
+// TODO: refactor, only need one function
+
+const testDir fsv.Path = "/Users/Till/Code/go/src/fsv/testdata"
+
+func runTests(tests []testStruct, t *testing.T) {
+
+	for _, test := range tests {
+		if ok, res := test.passes(); !ok {
+
+			t.Error(
+				"Test Failed (", test.name(), ")",
+				"\nexpected: ", test.expect(),
+				"\ngot:      ", res,
+				"\n",
+			)
+
+		}
+	}
+
+}
+
+func runValTests(tests []Tester, t *testing.T) {
+	for _, test := range tests {
+		if ok, res := test.Passes(); !ok {
+			t.Error(
+				"Test Failed (", test.Desc(), ")",
+				"\nexpected: ", test.Expect(),
+				"\ngot:      ", res,
+			)
+		}
+	}
+}
+
+// ------------------------- error testing helpers -------------------------- //
+// TODO: refactor so that only one of those exists
+
+type testStruct interface {
+	name() string
+	passes() (bool, error)
+	expect() error
+}
 
 type testFsvErr struct {
 	_name   string
@@ -104,31 +148,6 @@ func (t testOsErr) expect() error {
 	return t._example
 }
 
-type testStruct interface {
-	name() string
-	passes() (bool, error)
-	expect() error
-}
-
-const testDir fsv.Path = "/Users/Till/Code/go/src/fsv/testdata"
-
-func runTests(tests []testStruct, t *testing.T) {
-
-	for _, test := range tests {
-		if ok, res := test.passes(); !ok {
-
-			t.Error(
-				"Test Failed (", test.name(), ")",
-				"\nexpected: ", test.expect(),
-				"\ngot:      ", res,
-				"\n",
-			)
-
-		}
-	}
-
-}
-
 type testValFn struct {
 	_name    string
 	validate func() (bool, error)
@@ -160,4 +179,85 @@ func (t testValFn) passes() (bool, error) {
 
 func (t testValFn) expect() error {
 	return t._example
+}
+
+// ----------------------------- value testers ------------------------------ //
+type Tester interface {
+	Desc() string
+	Passes() (bool, string)
+	Expect() string
+}
+
+type boolTest struct {
+	desc   string
+	testFn func() (bool, error)
+	expect bool
+}
+
+func (t boolTest) Passes() (bool, string) {
+	res, err := t.testFn()
+	if err != nil {
+		return false, "ERROR: " + err.Error()
+	}
+	return t.expect == res, boolToString(res)
+}
+
+func (t boolTest) Expect() string {
+	return boolToString(t.expect)
+}
+
+func (t boolTest) Desc() string {
+	return t.desc
+}
+
+type intTest struct {
+	desc   string
+	testFn func() (int, error)
+	expect int
+}
+
+func (t intTest) Passes() (bool, string) {
+	res, err := t.testFn()
+	if err != nil {
+		return false, "ERROR: " + err.Error()
+	}
+	return t.expect == res, string(res)
+}
+
+func (t intTest) Expect() string {
+	return string(t.expect)
+}
+
+func (t intTest) Desc() string {
+	return t.desc
+}
+
+type stringTest struct {
+	desc   string
+	testFn func() (string, error)
+	expect string
+}
+
+func (t stringTest) Passes() (bool, string) {
+	res, err := t.testFn()
+	if err != nil {
+		return false, "ERROR: " + err.Error()
+	}
+	return t.expect == res, string(res)
+}
+
+func (t stringTest) Expect() string {
+	return string(t.expect)
+}
+
+func (t stringTest) Desc() string {
+	return t.desc
+}
+
+// -------------------- helpers I didn't expect to need --------------------- //
+func boolToString(b bool) string {
+	if b {
+		return "true"
+	}
+	return "false"
 }

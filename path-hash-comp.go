@@ -15,29 +15,28 @@ func (p Path) Hash() (hash.Hash64, error) {
 	// parallel/ optimized execution because this is an expensive operation
 	// io + hashing
 	var (
-		h   = fnv.New64()
+		h   = fnv.New64a()
 		ch  = make(chan []byte)
 		ERR error
 		err error
+		buf = make([]byte, h.BlockSize())
+		// TODO: BlockSize = 1 (inefficient?)
 	)
 
-	f, err := os.Open(string(p))
-	if err != nil {
-		return nil, err
+	f, ERR := os.Open(string(p))
+	if ERR != nil {
+		return nil, ERR
 	}
 	defer f.Close()
 
 	go func() {
 		defer close(ch)
 
-		var (
-			buf = make([]byte, 8)
-			n   int
-		)
-
-		for n != 0 && err != io.EOF {
-			n, err = f.Read(buf)
-			if err != nil {
+		for {
+			_, err = f.Read(buf)
+			if err == io.EOF {
+				return
+			} else if err != nil {
 				ERR = err
 				return
 			}
@@ -47,7 +46,10 @@ func (p Path) Hash() (hash.Hash64, error) {
 	}()
 
 	for bytes := range ch {
-		h.Write(bytes)
+		_, err := h.Write(bytes)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return h, ERR
@@ -67,15 +69,17 @@ func (p1 Path) SameHashAs(p2 Path) (bool, error) {
 	var (
 		sums  = [2]uint64{}
 		i     = 0
-		sumCh = make(chan uint64)
-		errCh = make(chan error)
+		sumCh = make(chan uint64, 2)
+		errCh = make(chan error, 2)
 	)
 
 	go func() {
 		h1, err := p1.Hash()
 		if err != nil {
 			errCh <- err
+			return
 		}
+
 		sumCh <- h1.Sum64()
 	}()
 
@@ -83,14 +87,16 @@ func (p1 Path) SameHashAs(p2 Path) (bool, error) {
 		h2, err := p2.Hash()
 		if err != nil {
 			errCh <- err
+			return
 		}
+
 		sumCh <- h2.Sum64()
 	}()
 
 	for i < 2 {
 		select {
-		case h := <-sumCh:
-			sums[i] = h
+		case s := <-sumCh:
+			sums[i] = s
 			i++
 		case err := <-errCh:
 			return false, err
@@ -165,7 +171,7 @@ func (p1 Path) SameInfoAs(p2 Path) (bool, error) {
 		return false, err
 	}
 
-	n2, err := p1.Info()
+	n2, err := p2.Info()
 	if err != nil {
 		return false, err
 	}
