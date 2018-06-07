@@ -102,7 +102,7 @@ func (p Path) Ls() (PathList, error) {
 
 	var ps PathList = make([]Path, len(es))
 	for i, e := range es {
-		ps[i] = p.AppendStr(e)
+		ps[i] = p.ExtendStr(e)
 	}
 
 	return ps, nil

@@ -18,13 +18,13 @@ import (
 //
 // case09: parent doesn't exist, superparent is file with f and p flags
 
-var mkTestLocdir = testDir.AppendStr("Mkdir")
+var mkTestLocdir = testDir.ExtendStr("Mkdir")
 var mkDirTests = []testStruct{
 	testFsvErr{
 
 		_name: "case01",
 		modify: func() error {
-			path := mkTestLocdir.AppendStr("case01/parent/dir")
+			path := mkTestLocdir.ExtendStr("case01/parent/dir")
 			return path.MkDir()
 		},
 		_expect: nil,
@@ -32,7 +32,7 @@ var mkDirTests = []testStruct{
 
 		_name: "case02",
 		modify: func() error {
-			path := mkTestLocdir.AppendStr("case02/parent/new")
+			path := mkTestLocdir.ExtendStr("case02/parent/new")
 			return path.MkDir()
 		},
 		_expect: nil,
@@ -40,7 +40,7 @@ var mkDirTests = []testStruct{
 
 		_name: "case03",
 		modify: func() error {
-			path := mkTestLocdir.AppendStr("case03/parent/file")
+			path := mkTestLocdir.ExtendStr("case03/parent/file")
 			return path.MkDir()
 		},
 		_expect: fsv.OCCUPIED_PATH,
@@ -48,7 +48,7 @@ var mkDirTests = []testStruct{
 
 		_name: "case04",
 		modify: func() error {
-			path := mkTestLocdir.AppendStr("case04/parent/file")
+			path := mkTestLocdir.ExtendStr("case04/parent/file")
 			return path.MkDir('f')
 		},
 		_expect: nil,
@@ -56,7 +56,7 @@ var mkDirTests = []testStruct{
 
 		_name: "case05",
 		modify: func() error {
-			path := mkTestLocdir.AppendStr("case05/parent2/new")
+			path := mkTestLocdir.ExtendStr("case05/parent2/new")
 			return path.MkDir()
 		},
 		_expect: fsv.MISSING_TARGETDIR,
@@ -64,7 +64,7 @@ var mkDirTests = []testStruct{
 
 		_name: "case06",
 		modify: func() error {
-			path := mkTestLocdir.AppendStr("case06/parentfile/new")
+			path := mkTestLocdir.ExtendStr("case06/parentfile/new")
 			return path.MkDir()
 		},
 		_expect: fsv.MISSING_TARGETDIR,
@@ -72,7 +72,7 @@ var mkDirTests = []testStruct{
 
 		_name: "case07",
 		modify: func() error {
-			path := mkTestLocdir.AppendStr("case07/parentfile/new")
+			path := mkTestLocdir.ExtendStr("case07/parentfile/new")
 			return path.MkDir('p')
 		},
 		_expect: fsv.OCCUPIED_PATH,
@@ -80,7 +80,7 @@ var mkDirTests = []testStruct{
 
 		_name: "case08",
 		modify: func() error {
-			path := mkTestLocdir.AppendStr("case08/parentfile/new")
+			path := mkTestLocdir.ExtendStr("case08/parentfile/new")
 			return path.MkDir('p', 'f')
 		},
 		_expect: nil,
@@ -88,7 +88,7 @@ var mkDirTests = []testStruct{
 
 		_name: "case08",
 		modify: func() error {
-			path := mkTestLocdir.AppendStr("case09/parentfile/deeply/nested/new/dir")
+			path := mkTestLocdir.ExtendStr("case09/parentfile/deeply/nested/new/dir")
 			return path.MkDir('p', 'f')
 		},
 		_expect: nil,
@@ -112,83 +112,83 @@ var mkDirTests = []testStruct{
 //
 // case09: parent doesn't exist, superparent is file with f and p flags
 
-var mkTestLocFile = testDir.AppendStr("MkFile")
+var mkTestLocFile = testDir.ExtendStr("MkFile")
 var mkFileTests = []testStruct{
 	testFsvErr{
 
 		_name: "case01",
 		modify: func() error {
-			return mkTestLocFile.AppendStr("case01/parent/new").MkFile(0644)
+			return mkTestLocFile.ExtendStr("case01/parent/new").MkFile(0644)
 		},
 		_expect: nil,
 	}, testFsvErr{
 
 		_name: "case02",
 		modify: func() error {
-			return mkTestLocFile.AppendStr("case02/parent/file").MkFile(0644)
+			return mkTestLocFile.ExtendStr("case02/parent/file").MkFile(0644)
 		},
 		_expect: fsv.OCCUPIED_PATH,
 	}, testFsvErr{
 
 		_name: "case03",
 		modify: func() error {
-			return mkTestLocFile.AppendStr("case03/parent/file").MkFile(0644, 'f')
+			return mkTestLocFile.ExtendStr("case03/parent/file").MkFile(0644, 'f')
 		},
 		_expect: nil,
 	}, testFsvErr{
 
 		_name: "case04",
 		modify: func() error {
-			return mkTestLocFile.AppendStr("case04/parent/dir").MkFile(0644)
+			return mkTestLocFile.ExtendStr("case04/parent/dir").MkFile(0644)
 		},
 		_expect: fsv.OCCUPIED_PATH,
 	}, testFsvErr{
 
 		_name: "case05",
 		modify: func() error {
-			return mkTestLocFile.AppendStr("case05/parent/dir").MkFile(0644, 'f')
+			return mkTestLocFile.ExtendStr("case05/parent/dir").MkFile(0644, 'f')
 		},
 		_expect: nil,
 	}, testFsvErr{
 
 		_name: "case06",
 		modify: func() error {
-			return mkTestLocFile.AppendStr("case06/parent2/new").MkFile(0644)
+			return mkTestLocFile.ExtendStr("case06/parent2/new").MkFile(0644)
 		},
 		_expect: fsv.MISSING_TARGETDIR,
 	}, testFsvErr{
 
 		_name: "case07",
 		modify: func() error {
-			return mkTestLocFile.AppendStr("case07/parent2/new").MkFile(0644, 'p')
+			return mkTestLocFile.ExtendStr("case07/parent2/new").MkFile(0644, 'p')
 		},
 		_expect: nil,
 	}, testFsvErr{
 
 		_name: "case08",
 		modify: func() error {
-			return mkTestLocFile.AppendStr("case08/parentfile/new").MkFile(0644)
+			return mkTestLocFile.ExtendStr("case08/parentfile/new").MkFile(0644)
 		},
 		_expect: fsv.OCCUPIED_PATH,
 	}, testFsvErr{
 
 		_name: "case09",
 		modify: func() error {
-			return mkTestLocFile.AppendStr("case09/parentfile/new").MkFile(0644, 'p')
+			return mkTestLocFile.ExtendStr("case09/parentfile/new").MkFile(0644, 'p')
 		},
 		_expect: fsv.OCCUPIED_PATH,
 	}, testFsvErr{
 
 		_name: "case10",
 		modify: func() error {
-			return mkTestLocFile.AppendStr("case10/parentfile/new").MkFile(0644, 'f')
+			return mkTestLocFile.ExtendStr("case10/parentfile/new").MkFile(0644, 'f')
 		},
 		_expect: fsv.MISSING_TARGETDIR,
 	}, testFsvErr{
 
 		_name: "case11",
 		modify: func() error {
-			return mkTestLocFile.AppendStr("case11/parentfile/new").MkFile(0644, 'f', 'p')
+			return mkTestLocFile.ExtendStr("case11/parentfile/new").MkFile(0644, 'f', 'p')
 		},
 		_expect: nil,
 	},

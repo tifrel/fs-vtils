@@ -13,6 +13,12 @@ func (p Path) ReadString() (string, error) {
 	return string(bytes), err
 }
 
+// ReadRunes reads the contents of the file at p and returns them as a []rune.
+func (p Path) ReadRunes() ([]rune, error) {
+	bytes, err := p.ReadBytes()
+	return []rune(string(bytes)), err
+}
+
 // ReadLines reads the contents of the file at p and returns them as a []string.
 func (p Path) ReadLines() ([]string, error) {
 	contents, err := p.ReadString()
@@ -31,9 +37,15 @@ func (p Path) WriteString(contents string) error {
 	return p.WriteBytes([]byte(contents))
 }
 
+// WriteRunes (over)writes the contents of the file located at p with a []rune.
+func (p Path) WriteRunes(runes []rune) error {
+	return p.WriteBytes([]byte(string(runes)))
+}
+
 // WriteLines (over)writes the contents of the file located at p with a []string.
+// This includes a trailing newline character.
 func (p Path) WriteLines(lines []string) error {
-	return p.WriteString(joinWith(lines, "\n"))
+	return p.WriteBytes([]byte(joinWith(lines, "\n")))
 }
 
 // WriteBytes (over)writes the contents of the file located at p with a []byte.
@@ -48,17 +60,22 @@ func (p Path) WriteBytes(bytes []byte) error {
 
 // -------------------------------- appends --------------------------------- //
 
-// AppendString appends its argument to a file
+// AppendString appends a string to the file located at p.
 func (p Path) AppendString(contents string) error {
 	return p.WriteBytes([]byte(contents))
 }
 
-// AppendLines appends its argument to a file
-func (p Path) AppendLines(lines []string) error {
-	return p.WriteString(joinWith(lines, "\n"))
+// AppendString appends a []byte to the file located at p.
+func (p Path) AppendRunes(runes []rune) error {
+	return p.WriteBytes([]byte(string(runes)))
 }
 
-// AppendBytes appends its argument to a file
+// AppendLines appends a []string to the file located at p.
+func (p Path) AppendLines(lines []string) error {
+	return p.WriteBytes([]byte(joinWith(lines, "\n")))
+}
+
+// AppendBytes appends a []rune to the file located at p.
 func (p Path) AppendBytes(bytes []byte) error {
 	f, err := os.OpenFile(string(p), os.O_APPEND|os.O_WRONLY, 0600)
 	if err != nil {

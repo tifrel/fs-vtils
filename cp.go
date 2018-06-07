@@ -92,7 +92,7 @@ func cpDir(p, target Path, flags cpFlags) error {
 		return err
 	}
 	return es.Each(func(e Path) error {
-		return cp(e, target.Append(e.Base()), flags)
+		return cp(e, target.Extend(e.Base()), flags)
 	})
 }
 

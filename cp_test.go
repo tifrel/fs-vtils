@@ -19,110 +19,110 @@ import (
 // case12: targetdir doesn't exist & no p flag => error
 // case13: targetdir doesn't exist & p flag => no error
 
-var cpTestLoc = testDir.AppendStr("Cp")
+var cpTestLoc = testDir.ExtendStr("Cp")
 var cpTests = []testStruct{
 	testFsvErr{
 
 		_name: "case01",
 		modify: func() error {
-			path := cpTestLoc.AppendStr("case01/file")
-			return path.Cp(cpTestLoc.AppendStr("case01/copied"))
+			path := cpTestLoc.ExtendStr("case01/file")
+			return path.Cp(cpTestLoc.ExtendStr("case01/copied"))
 		},
 		_expect: nil,
 	}, testFsvErr{
 
 		_name: "case02",
 		modify: func() error {
-			path := cpTestLoc.AppendStr("case02/filelink")
-			return path.Cp(cpTestLoc.AppendStr("case02/copied"))
+			path := cpTestLoc.ExtendStr("case02/filelink")
+			return path.Cp(cpTestLoc.ExtendStr("case02/copied"))
 		},
 		_expect: nil,
 	}, testFsvErr{
 
 		_name: "case03",
 		modify: func() error {
-			path := cpTestLoc.AppendStr("case03/filelink")
-			return path.Cp(cpTestLoc.AppendStr("case03/copied"), 'd')
+			path := cpTestLoc.ExtendStr("case03/filelink")
+			return path.Cp(cpTestLoc.ExtendStr("case03/copied"), 'd')
 		},
 		_expect: nil,
 	}, testFsvErr{
 
 		_name: "case04",
 		modify: func() error {
-			path := cpTestLoc.AppendStr("case04/dir")
-			return path.Cp(cpTestLoc.AppendStr("case04/copied"))
+			path := cpTestLoc.ExtendStr("case04/dir")
+			return path.Cp(cpTestLoc.ExtendStr("case04/copied"))
 		},
 		_expect: fsv.MISSING_REC_FLAG,
 	}, testFsvErr{
 
 		_name: "case05",
 		modify: func() error {
-			path := cpTestLoc.AppendStr("case05/dir")
-			return path.Cp(cpTestLoc.AppendStr("case05/copied"), 'r')
+			path := cpTestLoc.ExtendStr("case05/dir")
+			return path.Cp(cpTestLoc.ExtendStr("case05/copied"), 'r')
 		},
 		_expect: nil,
 	}, testFsvErr{
 
 		_name: "case06",
 		modify: func() error {
-			path := cpTestLoc.AppendStr("case06/dirlink")
-			return path.Cp(cpTestLoc.AppendStr("case06/copied"), 'd')
+			path := cpTestLoc.ExtendStr("case06/dirlink")
+			return path.Cp(cpTestLoc.ExtendStr("case06/copied"), 'd')
 		},
 		_expect: fsv.MISSING_REC_FLAG,
 	}, testFsvErr{
 
 		_name: "case07",
 		modify: func() error {
-			path := cpTestLoc.AppendStr("case07/dirlink")
-			return path.Cp(cpTestLoc.AppendStr("case07/copied"), 'd', 'r')
+			path := cpTestLoc.ExtendStr("case07/dirlink")
+			return path.Cp(cpTestLoc.ExtendStr("case07/copied"), 'd', 'r')
 		},
 		_expect: nil,
 	}, testFsvErr{
 
 		_name: "case08",
 		modify: func() error {
-			path := cpTestLoc.AppendStr("case08/dir2")
-			return path.Cp(cpTestLoc.AppendStr("case08/copied"), 'r')
+			path := cpTestLoc.ExtendStr("case08/dir2")
+			return path.Cp(cpTestLoc.ExtendStr("case08/copied"), 'r')
 		},
 		_expect: nil,
 	}, testFsvErr{
 
 		_name: "case09",
 		modify: func() error {
-			path := cpTestLoc.AppendStr("case09/dir2")
-			return path.Cp(cpTestLoc.AppendStr("case09/copied"), 'r', 'd')
+			path := cpTestLoc.ExtendStr("case09/dir2")
+			return path.Cp(cpTestLoc.ExtendStr("case09/copied"), 'r', 'd')
 		},
 		_expect: nil,
 	}, testFsvErr{
 
 		_name: "case10",
 		modify: func() error {
-			path := cpTestLoc.AppendStr("case10/file")
-			return path.Cp(cpTestLoc.AppendStr("case10/dir"))
+			path := cpTestLoc.ExtendStr("case10/file")
+			return path.Cp(cpTestLoc.ExtendStr("case10/dir"))
 		},
 		_expect: fsv.OCCUPIED_PATH,
 	}, testFsvErr{
 
 		_name: "case11",
 		modify: func() error {
-			path := cpTestLoc.AppendStr("case11/file")
-			return path.Cp(cpTestLoc.AppendStr("case11/dir"), 'f')
+			path := cpTestLoc.ExtendStr("case11/file")
+			return path.Cp(cpTestLoc.ExtendStr("case11/dir"), 'f')
 		},
 		_expect: nil,
 	}, testFsvErr{
 
 		_name: "case12",
 		modify: func() error {
-			path := cpTestLoc.AppendStr("case12/file")
-			return path.Cp(cpTestLoc.AppendStr("case12/newdir/copied"))
+			path := cpTestLoc.ExtendStr("case12/file")
+			return path.Cp(cpTestLoc.ExtendStr("case12/newdir/copied"))
 		},
 		_expect: fsv.MISSING_TARGETDIR,
 	}, testFsvErr{
 
 		_name: "case13",
 		modify: func() error {
-			path := cpTestLoc.AppendStr("case13/file")
-			return path.Cp(cpTestLoc.AppendStr("case13/newdir/copied"), 'p')
+			path := cpTestLoc.ExtendStr("case13/file")
+			return path.Cp(cpTestLoc.ExtendStr("case13/newdir/copied"), 'p')
 		},
 		_expect: nil,
 	},

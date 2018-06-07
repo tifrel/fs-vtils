@@ -7,8 +7,8 @@ import (
 
 // ----------------------- path manipulation methods ------------------------ //
 
-// Append returns p + delimiter + x
-func (p Path) Append(x Path) Path {
+// Extend returns p + delimiter + x
+func (p Path) Extend(x Path) Path {
 	return Path(pathPkg.Join(string(p), string(x)))
 }
 
@@ -24,8 +24,8 @@ func (p Path) Dir() Path {
 	return Path(pathPkg.Dir(string(p)))
 }
 
-// AppendStr is like Append, but takes a string as argument instead of a Path.
-func (p Path) AppendStr(x string) Path {
+// ExtendStr is like Extend, but takes a string as argument instead of a Path.
+func (p Path) ExtendStr(x string) Path {
 	return Path(pathPkg.Join(string(p), x))
 }
 

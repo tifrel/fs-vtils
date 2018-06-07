@@ -10,13 +10,13 @@ import (
 // case04: target is dir & no r flag => error
 // case05: target is dir & r flag => no error
 
-var rmTestLoc = testDir.AppendStr("Rm")
+var rmTestLoc = testDir.ExtendStr("Rm")
 var rmTests = []testStruct{
 	testFsvErr{
 
 		_name: "case01",
 		modify: func() error {
-			path := rmTestLoc.AppendStr("case01/file")
+			path := rmTestLoc.ExtendStr("case01/file")
 			return path.Rm()
 		},
 		_expect: nil,
@@ -24,7 +24,7 @@ var rmTests = []testStruct{
 
 		_name: "case02",
 		modify: func() error {
-			path := rmTestLoc.AppendStr("case02/symlink")
+			path := rmTestLoc.ExtendStr("case02/symlink")
 			return path.Rm()
 		},
 		_expect: nil,
@@ -32,7 +32,7 @@ var rmTests = []testStruct{
 
 		_name: "case03",
 		modify: func() error {
-			path := rmTestLoc.AppendStr("case03/none")
+			path := rmTestLoc.ExtendStr("case03/none")
 			return path.Rm()
 		},
 		_expect: nil,
@@ -40,7 +40,7 @@ var rmTests = []testStruct{
 
 		_name: "case04",
 		modify: func() error {
-			path := rmTestLoc.AppendStr("case04/dir")
+			path := rmTestLoc.ExtendStr("case04/dir")
 			return path.Rm()
 		},
 		_expect: fsv.MISSING_REC_FLAG,
@@ -48,7 +48,7 @@ var rmTests = []testStruct{
 
 		_name: "case05",
 		modify: func() error {
-			path := rmTestLoc.AppendStr("case05/dir")
+			path := rmTestLoc.ExtendStr("case05/dir")
 			return path.Rm('r')
 		},
 		_expect: nil,
