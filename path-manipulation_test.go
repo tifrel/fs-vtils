@@ -2,8 +2,6 @@ package fsv_test
 
 import "fsv"
 
-// case01: writing, file is empty => no error
-
 var manipulationTests = []Tester{
 	stringTest{
 		desc: "Path.Extend",

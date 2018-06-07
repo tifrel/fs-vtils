@@ -34,6 +34,9 @@ func TestRW(t *testing.T) {
 }
 
 /**** Information methods ****/
+func TestInfo(t *testing.T) {
+	runValTests(infoTests, t)
+}
 
 /**** Manipulation methods ****/
 func TestManipulation(t *testing.T) {
@@ -49,6 +52,17 @@ func TestHash(t *testing.T) {
 // TODO: refactor, only need one function
 
 const testDir fsv.Path = "/Users/Till/Code/go/src/fsv/testdata"
+
+var (
+	miscTestLoc = testDir.ExtendStr("misc")
+	miscA       = miscTestLoc.ExtendStr("a")
+	miscB       = miscTestLoc.ExtendStr("b")
+	miscC       = miscTestLoc.ExtendStr("c")
+	miscD       = miscTestLoc.ExtendStr("d")
+	miscE       = miscTestLoc.ExtendStr("e")
+	miscF       = miscTestLoc.ExtendStr("f")
+	miscDir     = miscTestLoc.ExtendStr("dir")
+)
 
 func runTests(tests []testStruct, t *testing.T) {
 

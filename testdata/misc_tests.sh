@@ -6,12 +6,13 @@ function reset_misc {
   rm -R $tests_misc/*
   cd $tests_misc
 
+  mkdir dir
   echo "contents" > a
   echo "contents" > b
   echo "other-contents-and-yadda-yadda" > c
-  ln a d
-  ln -s a e
-  ln -s e f
+  ln $(pwd)/a d
+  ln -s $(pwd)/a e
+  ln -s $(pwd)/e f
 
   # for i in {1..11}; do
 

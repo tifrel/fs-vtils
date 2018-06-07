@@ -44,12 +44,17 @@ func (p Path) IsSymlink() (bool, error) {
 }
 
 // Follow tries to read the path that a symlink residing at p points to.
+// If the symlink at p is linked to a relative path (instead of an absolute
+// one), the returned Path will also be relative and methods called on it will
+// fail, unless your program executes in the same directory where p is located.
 func (p Path) Follow() (Path, error) {
 	target, err := os.Readlink(string(p))
 	return Path(target), err
 }
 
 // Target tries to recursviely follow a symlink until a non-symlink is found.
+// The same restrictions on relative symlinks as mentioned in the documentation
+// for Follow apply.
 func (p Path) Target() (Path, error) {
 	isLn, err := p.IsSymlink()
 	if err != nil {

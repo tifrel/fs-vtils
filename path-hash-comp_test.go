@@ -1,15 +1,5 @@
 package fsv_test
 
-var (
-	miscTestLoc = testDir.ExtendStr("misc")
-	miscA       = miscTestLoc.ExtendStr("a")
-	miscB       = miscTestLoc.ExtendStr("b")
-	miscC       = miscTestLoc.ExtendStr("c")
-	miscD       = miscTestLoc.ExtendStr("d")
-	miscE       = miscTestLoc.ExtendStr("e")
-	miscF       = miscTestLoc.ExtendStr("f")
-)
-
 var hashTests = []Tester{
 	boolTest{
 		desc: "Hash comparison, different contents",

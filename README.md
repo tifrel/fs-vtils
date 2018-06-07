@@ -45,6 +45,5 @@ In the case you encounter an error or any unexpected behaviour, feel free to ope
 
 ## Roadmap
 
-- Further testing (current status: 50% of commands successfully tested)
+- Further testing (current status: 85% of commands successfully tested)
 - Improve this README
-- Further methods: `Path.Chmod()`, `Path.Chown()`, `Path.Owner()`
