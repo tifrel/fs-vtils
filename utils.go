@@ -128,3 +128,13 @@ func hasFlags(flagstrings []string, name string) bool {
 
 	return true
 }
+
+func dissect(p Path) []string {
+	splitted := []string{p.BaseStr()}
+	p = p.Dir()
+	for p != "." && p != "/" && p != "" {
+		splitted = append([]string{p.BaseStr()}, splitted...)
+		p = p.Dir()
+	}
+	return splitted
+}

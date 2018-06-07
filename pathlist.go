@@ -62,3 +62,53 @@ func (ps PathList) Each(fn func(Path) error) error {
 
 	return errs.errorize()
 }
+
+// Dirs maps Dir over the PathList.
+func (ps PathList) Dirs() []Path {
+	ds := make([]Path, len(ps))
+	for i, p := range ps {
+		ds[i] = p.Dir()
+	}
+	return ds
+}
+
+func (ps PathList) Dir() (Path, error) {
+	dir := ps[0].Dir()
+	for _, p := range ps[1:] {
+		if p.Dir() != dir {
+			return _PATH_EMPTY, NO_COMMON_DIR.new(_PATH_EMPTY, _FLAG_EMPTY)
+		}
+	}
+	return dir, nil
+}
+
+func (ps PathList) Common() Path {
+	splitted := make([][]string, len(ps))
+	common := "/"
+
+	for i, p := range ps {
+		splitted[i] = dissect(p)
+	}
+
+	for n, l := 0, len(splitted[0]); n < l; n++ {
+		next := splitted[0][n]
+
+		for _, parts := range splitted[1:] {
+			if parts[n] != next {
+				return Path(common)
+			}
+		}
+
+		common += next
+	}
+
+	return Path(common)
+}
+
+func (ps PathList) String() string {
+	s := ""
+	for _, p := range ps {
+		s += string(os.PathListSeparator) + string(p)
+	}
+	return s
+}

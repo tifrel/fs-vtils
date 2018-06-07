@@ -3,10 +3,11 @@ package fsv
 const (
 	no_FILE_OPERATION uint = 1 + iota
 	no_INVALID_FLAG
-	no_OCCUPIED_PATH
 	no_MISSING_TARGETDIR
 	no_MISSING_REC_FLAG
 	no_MISSING_OS_SUPPORT
+	no_NO_COMMON_DIR
+	no_OCCUPIED_PATH
 	no_UNKNOWN_ERR
 )
 
@@ -31,6 +32,7 @@ var (
 	MISSING_OS_SUPPORT = Error{no_MISSING_OS_SUPPORT, _PATH_EMPTY, _FLAG_EMPTY}
 	MISSING_REC_FLAG   = Error{no_MISSING_REC_FLAG, _PATH_EMPTY, _FLAG_EMPTY}
 	MISSING_TARGETDIR  = Error{no_MISSING_TARGETDIR, _PATH_EMPTY, _FLAG_EMPTY}
+	NO_COMMON_DIR      = Error{no_NO_COMMON_DIR, _PATH_EMPTY, _FLAG_EMPTY}
 	OCCUPIED_PATH      = Error{no_OCCUPIED_PATH, _PATH_EMPTY, _FLAG_EMPTY}
 	UNKNOWN_ERR        = Error{no_UNKNOWN_ERR, _PATH_EMPTY, _FLAG_EMPTY}
 )
@@ -53,9 +55,6 @@ func (e Error) Error() string {
 	case no_INVALID_FLAG:
 		return "Invalid flag: " + string(e.Flag)
 
-	case no_OCCUPIED_PATH:
-		return "Occupied path: " + string(e.Path)
-
 	case no_MISSING_TARGETDIR:
 		return "Inexistent target directory: " + string(e.Path)
 
@@ -64,6 +63,12 @@ func (e Error) Error() string {
 
 	case no_MISSING_OS_SUPPORT:
 		return "Operating system does not support this operation."
+
+	case no_NO_COMMON_DIR:
+		return "No common directory found."
+
+	case no_OCCUPIED_PATH:
+		return "Occupied path: " + string(e.Path)
 
 	case no_UNKNOWN_ERR:
 		return "Unkown error."
