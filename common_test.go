@@ -36,6 +36,9 @@ func TestRW(t *testing.T) {
 /**** Information methods ****/
 
 /**** Manipulation methods ****/
+func TestManipulation(t *testing.T) {
+	runValTests(manipulationTests, t)
+}
 
 /**** Hashing and comparison methods ****/
 func TestHash(t *testing.T) {
