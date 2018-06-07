@@ -1,7 +1,6 @@
 package fsv
 
 import (
-	"io"
 	"os"
 	"regexp"
 )
@@ -31,17 +30,17 @@ func joinWith(strs []string, del string) string {
 
 // ----------------------------- error handling ----------------------------- //
 
-func panicCheck(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
+// func panicCheck(e error) {
+// 	if e != nil {
+// 		panic(e)
+// 	}
+// }
 
-func checkRead(e error) {
-	if e != nil && e != io.EOF {
-		panic(e)
-	}
-}
+// func checkRead(e error) {
+// 	if e != nil && e != io.EOF {
+// 		panic(e)
+// 	}
+// }
 
 func closeOrPanic(f *os.File) {
 	err := f.Close()
