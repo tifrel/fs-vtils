@@ -64,16 +64,40 @@ func (p Path) HasHash(h hash.Hash64) (bool, error) {
 
 // SameHashAs checks wether p1 and p2 bath have the same.
 func (p1 Path) SameHashAs(p2 Path) (bool, error) {
-	h1, err := p1.Hash()
-	if err != nil {
-		return false, err
-	}
-	h2, err := p2.Hash()
-	if err != nil {
-		return false, err
+	var (
+		sums  = [2]uint64{}
+		i     = 0
+		sumCh = make(chan uint64)
+		errCh = make(chan error)
+	)
+
+	go func() {
+		h1, err := p1.Hash()
+		if err != nil {
+			errCh <- err
+		}
+		sumCh <- h1.Sum64()
+	}()
+
+	go func() {
+		h2, err := p2.Hash()
+		if err != nil {
+			errCh <- err
+		}
+		sumCh <- h2.Sum64()
+	}()
+
+	for i < 2 {
+		select {
+		case h := <-sumCh:
+			sums[i] = h
+			i++
+		case err := <-errCh:
+			return false, err
+		}
 	}
 
-	return h1.Sum64() == h2.Sum64(), nil
+	return sums[0] == sums[1], nil
 }
 
 // SameContentsAs checks wether two file have the same content,
