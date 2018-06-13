@@ -51,3 +51,37 @@ func (p Path) RelativeToStr(dir string) (Path, error) {
 	rel, err := filepath.Rel(dir, string(p))
 	return Path(rel), err
 }
+
+// Dissect returns a []Path of dirnames (and finally a filename) for p.
+func (p Path) Dissect() []Path {
+	splitted := []Path{p.Base()}
+	p = p.Dir()
+	for p != "." && p != "/" && p != "" {
+		splitted = append([]Path{p.Base()}, splitted...)
+		p = p.Dir()
+	}
+	return splitted
+}
+
+// DissectStr is like Dissect, but returns a []string.
+func (p Path) DissectStr() []string {
+	splitted := []string{p.BaseStr()}
+	p = p.Dir()
+	for p != "." && p != "/" && p != "" {
+		splitted = append([]string{p.BaseStr()}, splitted...)
+		p = p.Dir()
+	}
+	return splitted
+}
+
+func (p Path) Split() (dir, base Path) {
+	base = p.Base()
+	dir = p.Dir()
+	return
+}
+
+func (p Path) SplitStr() (dir, base string) {
+	base = p.BaseStr()
+	dir = p.DirStr()
+	return
+}

@@ -7,6 +7,29 @@ import (
 // PathList is a collection of paths, typically retrieved via Path.Ls().
 type PathList []Path
 
+// ---------------------- pathlist generation methods ----------------------- //
+
+// Ls tries to list the all paths of entries of the directory residing at p.
+func (p Path) Ls() (PathList, error) {
+	d, err := os.Open(string(p))
+	defer closeOrPanic(d)
+	if err != nil {
+		return nil, err
+	}
+
+	es, err := d.Readdirnames(-1)
+	if err != nil {
+		return nil, err
+	}
+
+	var ps PathList = make([]Path, len(es))
+	for i, e := range es {
+		ps[i] = p.ExtendStr(e)
+	}
+
+	return ps, nil
+}
+
 // Filter removes all Paths from a PathList, that do not satisfy the given
 // predicate.
 func (ps PathList) Filter(pred func(Path) bool) PathList {
@@ -83,11 +106,11 @@ func (ps PathList) Dir() (Path, error) {
 }
 
 func (ps PathList) Common() Path {
-	splitted := make([][]string, len(ps))
-	common := "/"
+	splitted := make([][]Path, len(ps))
+	common := Path("/")
 
 	for i, p := range ps {
-		splitted[i] = dissect(p)
+		splitted[i] = p.Dissect()
 	}
 
 	for n, l := 0, len(splitted[0]); n < l; n++ {

@@ -3,6 +3,7 @@ package fsv
 import (
 	"os"
 	"os/user"
+	"path/filepath"
 	"syscall"
 )
 
@@ -83,27 +84,6 @@ func (p Path) IsDir() (bool, error) {
 		return false, err
 	}
 	return info.IsDir(), nil
-}
-
-// Ls tries to list the all paths of entries of the directory residing at p.
-func (p Path) Ls() (PathList, error) {
-	d, err := os.Open(string(p))
-	defer closeOrPanic(d)
-	if err != nil {
-		return nil, err
-	}
-
-	es, err := d.Readdirnames(-1)
-	if err != nil {
-		return nil, err
-	}
-
-	var ps PathList = make([]Path, len(es))
-	for i, e := range es {
-		ps[i] = p.ExtendStr(e)
-	}
-
-	return ps, nil
 }
 
 // ----------------------------- based on name ------------------------------ //
@@ -233,4 +213,11 @@ func (p Path) CountLines() (int, error) {
 
 	// -1 to remove trailing newline: TODO: do or don't?
 	return c - 1, nil
+}
+
+// ----------------------- shortcut for filepath.walk ----------------------- //
+
+// Walk is a shortcut for filepath.Walk.
+func (p Path) Walk(walkFn filepath.WalkFunc) error {
+	return filepath.Walk(string(p), walkFn)
 }
